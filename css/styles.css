@@ -178,7 +178,7 @@ address a {
 
 
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .grid-container {
         grid-template-rows: 160px 1fr 200px;
     }
