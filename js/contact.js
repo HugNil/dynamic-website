@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function validateForm() {
         let isValid = true;
 
-        // Validera namn (endast bokstäver)
+        // Kolla namn (endast bokstäver)
         if (!/^[a-zA-Z\s]+$/.test(nameInput.value)) {
             nameError.textContent = "Please enter a valid name, containing only letters.";
             isValid = false;
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             nameError.textContent = "";
         }
 
-        // Validera email (måste innehålla @ och .)
+        // Kolla email (måste innehålla @ och .)
         if (!/^\S+@\S+\.\S+$/.test(emailInput.value)) {
             emailError.textContent = "Enter a valid email address.";
             isValid = false;
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
             emailError.textContent = "";
         }
 
-        // Validera att meddelandet inte är tomt
+        // Kolla att meddelandet inte är tomt
         if (messageInput.value.length > 300 || messageInput.value.length === 0) {
             messageError.textContent = "Message should be between 1 and 300 characters.";
             isValid = false;

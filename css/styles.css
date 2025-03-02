@@ -180,11 +180,6 @@ address a {
 
 @media (max-width: 768px) {
     .grid-container {
-        grid-template-areas: 
-            'header'
-            'main'
-            'footer';
-        grid-template-columns: auto;
         grid-template-rows: 160px 1fr 200px;
     }
     header {

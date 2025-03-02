@@ -47,8 +47,6 @@ async function fetchPosts() {
 
 
 
-
-
 function displayPosts(posts) {
     const postsContainer = document.getElementById("posts-container");
 
@@ -68,7 +66,6 @@ function displayPosts(posts) {
         if (post.comments && post.comments.length > 0) {
             commentsSection.innerHTML = `<h3>Comments:</h3>`;
 
-            // Visa endast två kommentarer från början
             post.comments.forEach(comment => {
                 const commentElement = document.createElement("p");
                 commentElement.classList.add("comment");
@@ -104,26 +101,19 @@ function displayPosts(posts) {
     });
 }
 
-
-
 fetchPosts();
 
 
-window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        fetchPosts(); // Hämta fler inlägg när användaren når botten
-    }
-});
+
 
 window.addEventListener("scroll", () => {
     const modal = document.getElementById("user-modal");
-    if (modal.style.display === "flex") return; // 🔴 Stoppa infinite scroll om modalen är öppen
+    if (modal.style.display === "flex") return; // Stoppa infinite scroll om modalen är öppen
 
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-        fetchPosts(); // Hämta fler inlägg när användaren når botten
+        fetchPosts(); // Hämta fler inlägg när användaren når botten, infinite scroll
     }
 });
-
 
 
 
@@ -147,7 +137,7 @@ async function openUserModal(userId) {
             </section>
         `;
 
-        document.getElementById("user-modal").style.display = "flex"; // Öppna modalen
+        document.getElementById("user-modal").style.display = "flex"; // Gör modalen synlig
         fetchUserPosts(userId);
     } catch (error) {
         console.error("Error fetching user data:", error);
@@ -167,9 +157,6 @@ window.addEventListener("click", (event) => {
         modal.style.display = "none";
     }
 });
-
-
-
 
 
 
