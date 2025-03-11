@@ -84,7 +84,7 @@ function displayPosts(posts) {
                 By: <a href="#" class="user-link" data-userid="${post.userId}">${post.username || "Unknown"}</a>
             </p>
             <p class="post-meta">Tags: ${post.tags?.join(", ") || "No tags"}</p>
-            <p class="post-meta">👍 Likes: ${post.reactions?.likes || 0} | 👎 Dislikes: ${post.reactions?.dislikes || 0}</p>
+            <p class="post-meta"><a class="button interaction">👍</a> ${post.reactions?.likes || 0} | <a class="button interaction">👎</a> ${post.reactions?.dislikes || 0}</p>
         `;
 
         postElement.appendChild(commentsSection);
@@ -118,32 +118,46 @@ window.addEventListener("scroll", () => {
 
 
 
+const userCache = {};
 async function openUserModal(userId) {
-    if (!userId) return; // Förhindra att modalen öppnas utan användare
+    if (!userId) return;
+
+    if (userCache[userId]) {
+        console.log("Using cached user data:", userCache[userId]);
+        displayUserModal(userCache[userId]); // Använd sparad data
+        return;
+    }
 
     try {
         const response = await fetch(`https://dummyjson.com/users/${userId}`);
+        if (!response.ok) throw new Error("Failed to fetch user data");
+
         const user = await response.json();
+        userCache[userId] = user; // Spara användaren i cache
 
-        const modalBody = document.getElementById("user-modal-body");
-        modalBody.innerHTML = `
-            <h2>${user.firstName} ${user.lastName}</h2>
-            <p><strong>Username:</strong> ${user.username}</p>
-            <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>Location:</strong> ${user.address.city}, ${user.address.state}</p>
-            <h3>Posts by ${user.username}</h3>
-            <section id="modal-user-posts" class="posts-container">
-                <p>Loading posts...</p>
-            </section>
-        `;
-
-        document.getElementById("user-modal").style.display = "flex"; // Gör modalen synlig
-        fetchUserPosts(userId);
+        displayUserModal(user); // Visa användarens info i modalen
     } catch (error) {
         console.error("Error fetching user data:", error);
     }
 }
 
+
+function displayUserModal(user) {
+    const modalBody = document.getElementById("user-modal-body");
+    modalBody.innerHTML = `
+        <img src="${user.image || 'https://via.placeholder.com/100'}" alt="${user.firstName} ${user.lastName}'s profile picture" class="profile-img">
+        <h2>${user.firstName} ${user.lastName}</h2>
+        <p><strong>Username:</strong> ${user.username}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <h2 class="bio"><strong>Bio:</strong></h2>
+        <p><strong>Gender:</strong> ${user.gender} | <strong>Age:</strong> ${user.age}</p>
+        <p><strong>Company:</strong> ${user.company.name}</p>
+        <p><strong>Job Title:</strong> ${user.company.title}</p>
+        <p><strong>Location:</strong> ${user.address.city}, ${user.address.state}</p>
+    `;
+
+    document.getElementById("user-modal").style.display = "flex";
+}
 
 // Stäng modal när man klickar på "×"
 document.querySelector(".close").addEventListener("click", () => {
